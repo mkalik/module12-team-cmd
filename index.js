@@ -11,12 +11,17 @@ const db = mysql.createConnection({
     password: process.env.DB_PASS,
 });
 
+// `Select employee.id, employee.first_name, employee.last_name, department.dept_name, roles.title, roles.salary
+// FROM employee inner join roles on employee.role_id = roles.id
+// inner join department on roles.dept_id=department.id`,
 async function showReq(i) {
     const sql = [
         'select * from department',
         'select * from roles',
-        `Select employee.id, employee.first_name, employee.last_name, department.dept_name, roles.title, roles.salary  
-        FROM employee inner join roles on employee.role_id = roles.id
+        `Select employee.id, employee.first_name, employee.last_name, department.dept_name , roles.title, roles.salary, concat(m_employee.first_name,' ', m_employee.last_name) as manager
+        FROM employee employee
+        left join employee m_employee on employee.manager_id=m_employee.id 
+        inner join roles on employee.role_id = roles.id
         inner join department on roles.dept_id=department.id`,
     ];
     db.promise()
