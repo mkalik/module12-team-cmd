@@ -52,7 +52,7 @@ async function addRole() {
         name: value[1],
         value: value[0],
     }));
-    console.log(departments);
+    // console.log(departments);
     var newRole = await ask
         .prompt([
             {
@@ -84,12 +84,12 @@ async function addEmployee() {
     const sql_roles = await db
         .promise()
         .query({ sql: 'SELECT * FROM roles', rowsAsArray: true });
-    console.log(sql_roles);
+    // console.log(sql_roles);
     var roles = sql_roles[0].map((values) => ({
         name: values[1],
         value: values[0],
     }));
-    console.log(roles);
+    // console.log(roles);
     const sql_managers = await db.promise().query({
         sql: `SELECT CONCAT(employee.first_name ,' ', employee.last_name) AS manager, employee.id as ID FROM employee WHERE employee.manager_id IS NULL`,
         rowsAsArray: true,
@@ -98,7 +98,8 @@ async function addEmployee() {
         name: values[0],
         value: values[1],
     }));
-    console.log(managers);
+    managers.push({ name: 'none', value: null });
+    // console.log(managers);
 
     const newEmployee = await ask
         .prompt([
@@ -126,7 +127,6 @@ async function addEmployee() {
             },
         ])
         .then((answers) => {
-            console.log(answers);
             db.promise().query(
                 `INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES("${answers.first_name}", "${answers.last_name}", ${answers.role}, ${answers.manager})`
             );
@@ -142,7 +142,7 @@ async function updateEmployee() {
         name: values[0],
         value: values[1],
     }));
-    console.log(employee);
+    // console.log(employee);
     const sql_roles = await db.promise().query({
         sql: `SELECT roles.title, roles.id FROM roles`,
         rowsAsArray: true,
@@ -151,7 +151,7 @@ async function updateEmployee() {
         name: values[0],
         value: values[1],
     }));
-    console.log(roles);
+    // console.log(roles);
     ask.prompt([
         {
             type: 'list',
@@ -167,7 +167,7 @@ async function updateEmployee() {
         },
     ])
         .then((answers) => {
-            console.log(answers);
+            // console.log(answers);
             db.promise().query(
                 `UPDATE employee SET role_id=${answers.new_role} WHERE employee.id=${answers.employee}`
             );
@@ -222,6 +222,7 @@ function questions() {
                 break;
             default:
                 console.log('something went wrong');
+                process.exit(1);
         }
     });
 }
