@@ -133,7 +133,47 @@ async function addEmployee() {
         })
         .then(() => questions());
 }
-async function updateEmployee() {}
+async function updateEmployee() {
+    const sql_employee = await db.promise().query({
+        sql: `SELECT CONCAT(employee.first_name,' ',employee.last_name) as name, employee.id from employee`,
+        rowsAsArray: true,
+    });
+    const employee = sql_employee[0].map((values) => ({
+        name: values[0],
+        value: values[1],
+    }));
+    console.log(employee);
+    const sql_roles = await db.promise().query({
+        sql: `SELECT roles.title, roles.id FROM roles`,
+        rowsAsArray: true,
+    });
+    const roles = sql_roles[0].map((values) => ({
+        name: values[0],
+        value: values[1],
+    }));
+    console.log(roles);
+    ask.prompt([
+        {
+            type: 'list',
+            name: 'employee',
+            message: 'which employee would you like to update?',
+            choices: employee,
+        },
+        {
+            type: 'list',
+            name: 'new_role',
+            message: 'what is this employees new role?',
+            choices: roles,
+        },
+    ])
+        .then((answers) => {
+            console.log(answers);
+            db.promise().query(
+                `UPDATE employee SET role_id=${answers.new_role} WHERE employee.id=${answers.employee}`
+            );
+        })
+        .then(() => questions());
+}
 
 const menu = [
     {
@@ -154,7 +194,6 @@ const menu = [
 ];
 function questions() {
     ask.prompt(menu).then((answers) => {
-        console.log(answers.menu);
         switch (answers.menu) {
             case 1:
                 showReq(1);
