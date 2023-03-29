@@ -15,7 +15,7 @@ Clone this repo and youre nearly good to go.
 this application makes use of Node.js and various packages ( chiefly mysql2, inquirer, and console.table)
 
 in order to install these dependencies, run this command in the root directory:
-    
+
     npm i
 
 youve got to also add a .env file with your own sql credentials in order to connect to a database
@@ -26,7 +26,7 @@ with all of that done, you can run:
 
     npm start
 
-[heres a video tutorial!]( )
+[heres a video tutorial!](https://youtu.be/vATK8xKZoYk)
 
 ## 3.Credits:
 
