@@ -1,16 +1,16 @@
 <EMPLOYEE-TRACKER>
 
-#Employee database manager
+# Employee database manager
 
-##0.Description:
+## 0.Description:
 
 a command line application that allows one to manage various employees, departments, and roles.
 
-##1.Installation:
+## 1.Installation:
 
 Clone this repo and youre nearly good to go.
 
-##2.Usage:
+## 2.Usage:
 
 this application makes use of Node.js and various packages ( chiefly mysql2, inquirer, and console.table)
 
@@ -28,11 +28,11 @@ with all of that done, you can run:
 
 [heres a video tutorial!]( )
 
-##3.Credits:
+## 3.Credits:
 
 work done by mkalik.
 
-##4.License:
+## 4.License:
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
