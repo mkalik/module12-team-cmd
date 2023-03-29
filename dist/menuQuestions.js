@@ -21,7 +21,7 @@ const menu = [
             { name: 'add a department', value: 4 },
             { name: 'add a role', value: 5 },
             { name: 'add an employee', value: 6 },
-            { name: 'update an employee role', value: 7 },
+            // { name: 'update an employee role', value: 7 },
             { name: 'quit', value: 8 },
         ],
     },
