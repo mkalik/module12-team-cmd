@@ -7,6 +7,8 @@ const {
     addEmployee,
     updateEmployee,
 } = require('./sqlReqs.js');
+//items for the inquirer prompts
+//youll notice that ech prompt has a value, i figured this would make dealing with user selections much more straightforward
 const menu = [
     {
         type: 'list',
@@ -27,6 +29,7 @@ const menu = [
 function questions() {
     ask.prompt(menu)
         .then((answers) => {
+            //this is where the values come into play. Also returning instead of breaking in order to keep things concise.
             switch (answers.menu) {
                 case 1:
                     return showReq(1);
@@ -52,6 +55,7 @@ function questions() {
                     break;
             }
         })
+        //gotta love a little recursion
         .then(() => questions());
 }
 

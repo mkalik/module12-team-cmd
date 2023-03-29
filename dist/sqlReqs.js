@@ -1,10 +1,11 @@
-// `Select employee.id, employee.first_name, employee.last_name, department.dept_name, roles.title, roles.salary
-// inner join department on roles.dept_id=department.id`,
 const table = require('console.table');
 const ask = require('inquirer');
+//importing the db connection into this file so we can play with it
+//all variables that are assigned to the db variable are const wheareas everything else is a let. Aids in readability.
 const { db } = require('../dist/connection.js');
-// const { questions } = require('./menuQuestions.js');
+//all of these functions make use of the asynchronous utilities so our tables have time to populate the command prompt
 async function showReq(i) {
+    //an array of requests utilized to show the various data from the tables within our database. This array allows for all of this functionality to live within this one function.
     const sql = [
         'select * from department',
         'select * from roles',
@@ -21,9 +22,9 @@ async function showReq(i) {
         .then((rows) => {
             console.table(rows[0]);
         });
-    // .then(() => questions());
     return request;
 }
+//adds a department into our database
 async function addDept() {
     let newDept = await ask.prompt([
         {
@@ -32,16 +33,18 @@ async function addDept() {
             message: 'Whats the name of the new Department?',
         },
     ]);
-    let data = await db
+    const data = await db
         .promise()
         .query(
             `INSERT INTO department(dept_name) VALUES("${newDept.dept_name}")`
         );
     return data;
 }
-
+//the functions below all make use of maps, this is for the sake of dynamic menu options as well as a means of permitting the use of the value attribute within our prompts.
+//reduces the amount of code as one doesnt have to use a string comparison
+//adds a role into our database
 async function addRole() {
-    let sql_dept = await db
+    const sql_dept = await db
         .promise()
         .query({ sql: 'SELECT * from department', rowsAsArray: true });
     let departments = sql_dept[0].map((value) => ({
@@ -49,7 +52,7 @@ async function addRole() {
         value: value[0],
     }));
     // console.log(departments);
-    const newRole = await ask
+    let newRole = await ask
         .prompt([
             {
                 type: 'input',
@@ -74,20 +77,17 @@ async function addRole() {
             );
         });
     return newRole;
-    // .then(() => questions());
 }
-
-async function addEmployee(db) {
+//adds an employee into our database
+async function addEmployee() {
     const sql_roles = await db
         .promise()
         .query({ sql: 'SELECT * FROM roles', rowsAsArray: true });
-    // console.log(sql_roles);
-    var roles = sql_roles[0].map((values) => ({
+    let roles = sql_roles[0].map((values) => ({
         name: values[1],
         value: values[0],
     }));
-    // console.log(roles);
-    let sql_managers = await db.promise().query({
+    const sql_managers = await db.promise().query({
         sql: `SELECT CONCAT(employee.first_name ,' ', employee.last_name) AS manager, employee.id as ID FROM employee WHERE employee.manager_id IS NULL`,
         rowsAsArray: true,
     });
@@ -96,9 +96,8 @@ async function addEmployee(db) {
         value: values[1],
     }));
     managers.push({ name: 'none', value: null });
-    // console.log(managers);
 
-    const newEmployee = await ask
+    let newEmployee = await ask
         .prompt([
             {
                 type: 'input',
@@ -129,14 +128,13 @@ async function addEmployee(db) {
             );
         });
     return newEmployee;
-    // then(() => questions());
 }
-async function updateEmployee(db) {
+async function updateEmployee() {
     const sql_employee = await db.promise().query({
         sql: `SELECT CONCAT(employee.first_name,' ',employee.last_name) as name, employee.id from employee`,
         rowsAsArray: true,
     });
-    const employee = sql_employee[0].map((values) => ({
+    let employee = sql_employee[0].map((values) => ({
         name: values[0],
         value: values[1],
     }));
@@ -145,12 +143,12 @@ async function updateEmployee(db) {
         sql: `SELECT roles.title, roles.id FROM roles`,
         rowsAsArray: true,
     });
-    const roles = sql_roles[0].map((values) => ({
+    let roles = sql_roles[0].map((values) => ({
         name: values[0],
         value: values[1],
     }));
     // console.log(roles);
-    const data = await ask
+    let data = await ask
         .prompt([
             {
                 type: 'list',
@@ -172,9 +170,8 @@ async function updateEmployee(db) {
             );
         });
     return data;
-    // .then(() => questions());
 }
-
+//exports all of our functions
 module.exports = {
     showReq,
     addDept,
